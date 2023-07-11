@@ -14,7 +14,7 @@ Repository for a simple Todo List Application (With bugs and tasks to be complet
 
 ### Refactoring Tasks
 
--   ![vue](https://img.shields.io/badge/-vue-brightgreen) In the `dashboard.vue` file. There are repeated codes in line `99-110` and `125-132`. Would it be better if we can extract this code as a vue component, so that it will be reusable later on? 
+-   ![vue](https://img.shields.io/badge/-vue-brightgreen) In the `dashboard.vue` file. There are repeated codes in line `99-110` and `133-140`. Would it be better if we can extract this code as a vue component, so that it will be reusable later on? 
 -   ![laravel](https://img.shields.io/badge/-laravel-orange) Update all controller methods in `TaskController` to use Laravel Implicit Route Model Binding, so that we don't need to manualy resolving the required `Task` model.
 
 ### Feature Request Tasks
