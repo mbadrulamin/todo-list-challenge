@@ -25,4 +25,9 @@ class TaskPolicy
     {
         return $user->id == $task->user->id;
     }
+
+    public function delete(User $user, Task $task)
+    {
+      return $user->id == $task->user->id;
+    }
 }

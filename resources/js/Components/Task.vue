@@ -1,5 +1,6 @@
 <script setup>
 import Checkbox from "@/Components/Checkbox.vue";
+import { DateTime } from "luxon";
 import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
 
@@ -35,6 +36,14 @@ function deleteTask(taskId) {
     },
   });
 }
+
+function formatDate(date) {
+  if (!date) {
+    return '';
+  }
+  const formattedDate = DateTime.fromISO(date).toLocaleString(DateTime.DATETIME_MED);
+  return formattedDate;
+}
 </script>
 
 <template>
@@ -57,6 +66,9 @@ function deleteTask(taskId) {
           :class="{ 'line-through': task.is_completed }"
           >{{ task.title }}</label
         >
+        <p v-if="task.is_completed" class="text-gray-500 text-sm">
+          Completed on: {{ formatDate(task.updated_at) }}
+        </p>
       </div>
       <button v-show="showDeleteButton" @click="deleteTask(task.id)">
         <svg

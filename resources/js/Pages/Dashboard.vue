@@ -1,6 +1,8 @@
 <script setup>
+import Empty from "@/Components/Empty.vue";
 import Task from "@/Components/Task.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import {DateTime} from "luxon"
 import { useForm } from "@inertiajs/vue3";
 import { useFocus } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
@@ -19,11 +21,19 @@ const formNewTask = useForm({
   title: null,
 });
 
+// const availableTasks = computed(() =>
+//   props.tasks.filter((task) => {
+//     return !task.is_completed;
+//   })
+// );
+
 const availableTasks = computed(() =>
-  props.tasks.filter((task) => {
-    return !task.is_completed;
-  })
-);
+props.tasks
+.filter((task) => !task.is_completed)
+.sort((a, b) => {
+  return DateTime.fromISO(b.created_at).toMillis() - DateTime.fromISO(a.created_at).toMillis();
+  // return b.created_at - a.created_at;
+}))
 
 const completedTasks = computed(() =>
   props.tasks.filter((task) => {
@@ -85,7 +95,7 @@ onMounted(() => {
                 }"
                 class="text-xs text-gray-500 hover:text-gray-700 font-medium rounded-md py-2 px-3 dark:text-gray-400 dark:hover:text-gray-300"
                 role="tab"
-                @click="showCompletedTask = false"
+                @click="showCompletedTask = true"
               >
                 Completed Tasks
               </button>
@@ -97,7 +107,7 @@ onMounted(() => {
             <Task v-for="task in completedTasks" :key="task.id" :task="task" />
           </template>
           <div v-else class="flex flex-col items-center px-4 py-6">
-            <img
+            <!-- <img
               src="images/urban-683.png"
               class="dark:mix-blend-overlay dark:grayscale"
             />
@@ -106,7 +116,12 @@ onMounted(() => {
             </h5>
             <p class="dark:text-gray-300">
               Be productive and start completing your tasks!!
-            </p>
+            </p> -->
+            <Empty
+              imageSrc="images/urban-683.png"
+              title="Nothing has been completed."
+              description="Be productive and start completing your tasks!!"
+            />
           </div>
         </div>
         <div v-else class="space-y-2">
@@ -118,6 +133,7 @@ onMounted(() => {
               ref="newTaskInput"
               placeholder="Add a task - enter to submit"
               class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-l-md shadow-sm w-full"
+              @keyup.enter="enterPressedOnNewTask()"
             />
             <button
               type="button"
@@ -131,12 +147,18 @@ onMounted(() => {
             <Task v-for="task in availableTasks" :key="task.id" :task="task" />
           </template>
           <div v-else class="flex flex-col items-center px-4 py-6">
-            <img
+            <!-- <img
               src="images/urban-683.png"
               class="dark:mix-blend-overlay dark:grayscale"
             />
             <h5 class="text-2xl dark:text-gray-50">There is nothing in here</h5>
-            <p class="dark:text-gray-300">Add new task to start!</p>
+            <p class="dark:text-gray-300">Add new task to start!</p> -->
+
+            <Empty
+              imageSrc="images/urban-683.png"
+              title="There is nothing in here"
+              description="Add new task to start!"
+            />
           </div>
         </div>
       </div>

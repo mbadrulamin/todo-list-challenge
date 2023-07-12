@@ -10,7 +10,7 @@ class DashboardController extends Controller
     public function dashboard(Request $request)
     {
         return Inertia::render('Dashboard', [
-            'tasks' => $request->user()->tasks,
+            'tasks' => $request->user()->tasks()->latest()->get(),
         ]);
     }
 }
