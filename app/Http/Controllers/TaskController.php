@@ -16,10 +16,12 @@ class TaskController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string',
+            'due_date' => 'nullable|date'
         ]);
 
         $task = new Task();
         $task->title = $validated['title'];
+        $task->due_date = $validated['due_date'];
         $task->user()->associate($request->user());
         $task->save();
 

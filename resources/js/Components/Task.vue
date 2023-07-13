@@ -69,6 +69,9 @@ function formatDate(date) {
         <p v-if="task.is_completed" class="text-gray-500 text-sm">
           Completed on: {{ formatDate(task.updated_at) }}
         </p>
+        <p v-else class="text-gray-500 text-sm">
+          Due on: {{task.due_date}}
+        </p>
       </div>
       <button v-show="showDeleteButton" @click="deleteTask(task.id)">
         <svg

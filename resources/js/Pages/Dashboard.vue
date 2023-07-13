@@ -19,6 +19,7 @@ const { focused } = useFocus(newTaskInput);
 const showCompletedTask = ref(false);
 const formNewTask = useForm({
   title: null,
+  due_date: null,
 });
 
 // const availableTasks = computed(() =>
@@ -46,6 +47,7 @@ function enterPressedOnNewTask() {
     preserveScroll: true,
     onSuccess: () => {
       formNewTask.title = null;
+      formNewTask.due_date = null;
       document.activeElement.blur();
     },
   });
@@ -134,6 +136,13 @@ onMounted(() => {
               placeholder="Add a task - enter to submit"
               class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-l-md shadow-sm w-full"
               @keyup.enter="enterPressedOnNewTask()"
+            />
+            <input
+              name="dueDate"
+              v-model="formNewTask.due_date"
+              type="datetime-local"
+              ref="newTaskInput"
+              class="border-gray-300 bg-white dark:bg-gray-200 text-gray-900 dark:text-gray-700 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-r-md shadow-sm px-3 py-2 w-72"
             />
             <button
               type="button"
