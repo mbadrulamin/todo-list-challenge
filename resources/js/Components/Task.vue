@@ -9,9 +9,17 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  categories: {
+    type: Array,
+    default: () => [],
+  }
 });
 
+console.log('tasks', props.task);
+console.log('categories', props.categories);
+
 const showDeleteButton = ref(false);
+const categories = ref([]);
 
 function updateTask(taskId) {
   router.put(
@@ -44,6 +52,12 @@ function formatDate(date) {
   const formattedDate = DateTime.fromISO(date).toLocaleString(DateTime.DATETIME_MED);
   return formattedDate;
 }
+
+function getCategoryName(categoryId) {
+  const category = props.categories.find((category) => category.id === categoryId);
+  return category ? category.category_name : '';
+}
+
 </script>
 
 <template>
@@ -69,8 +83,10 @@ function formatDate(date) {
         <p v-if="task.is_completed" class="text-gray-500 text-sm">
           Completed on: {{ formatDate(task.updated_at) }}
         </p>
-        <p v-else class="text-gray-500 text-sm">
-          Due on: {{task.due_date}}
+        <p v-else class="text-gray-500 text-sm" >
+          Due on: {{task.due_date}} <br>
+          Category: {{ task.category_id }}
+          Category: {{ getCategoryName(categories.category_name) }}
         </p>
       </div>
       <button v-show="showDeleteButton" @click="deleteTask(task.id)">

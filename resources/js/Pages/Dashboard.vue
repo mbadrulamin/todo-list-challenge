@@ -12,6 +12,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  categories: {
+    type: Array,
+    default: () => [],
+  }
 });
 
 const newTaskInput = ref(null);
@@ -20,6 +24,8 @@ const showCompletedTask = ref(false);
 const formNewTask = useForm({
   title: null,
   due_date: null,
+  category_id: null,
+
 });
 
 // const availableTasks = computed(() =>
@@ -144,6 +150,15 @@ onMounted(() => {
               ref="newTaskInput"
               class="border-gray-300 bg-white dark:bg-gray-200 text-gray-900 dark:text-gray-700 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-r-md shadow-sm px-3 py-2 w-72"
             />
+            <select
+              name="category"
+              v-model="formNewTask.category_id"
+              ref="newTaskInput"
+              class="border-gray-300 bg-white dark:bg-gray-200 text-gray-900 dark:text-gray-700 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-r-none shadow-sm px-3 py-2 w-64"
+            >
+              <option value="">Select a category</option>
+              <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.category_name }}</option>
+            </select>
             <button
               type="button"
               class="inline-flex flex-shrink-0 items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-r-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
@@ -153,7 +168,7 @@ onMounted(() => {
             </button>
           </div>
           <template v-if="availableTasks.length > 0">
-            <Task v-for="task in availableTasks" :key="task.id" :task="task" />
+            <Task v-for="task in availableTasks" :key="task.id" :task="task" :categories="categories"/>
           </template>
           <div v-else class="flex flex-col items-center px-4 py-6">
             <!-- <img
