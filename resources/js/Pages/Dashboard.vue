@@ -15,7 +15,11 @@ const props = defineProps({
   categories: {
     type: Array,
     default: () => [],
-  }
+  },
+  category: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const newTaskInput = ref(null);
@@ -122,7 +126,7 @@ onMounted(() => {
         </div>
         <div v-if="showCompletedTask" class="space-y-2">
           <template v-if="completedTasks.length > 0">
-            <Task v-for="task in completedTasks" :key="task.id" :task="task" :categories="categories" />
+            <Task v-for="task in completedTasks" :key="task.id" :task="task" :category="category" />
           </template>
           <div v-else class="flex flex-col items-center px-4 py-6">
             <!-- <img
@@ -179,7 +183,7 @@ onMounted(() => {
             </button>
           </div>
           <template v-if="availableTasks.length > 0">
-            <Task v-for="task in availableTasks" :key="task.id" :task="task" :categories="categories"/>
+            <Task v-for="task in availableTasks" :key="task.id" :task="task" :category="category"/>
           </template>
           <div v-else class="flex flex-col items-center px-4 py-6">
             <!-- <img

@@ -13,7 +13,11 @@ const props = defineProps({
   categories: {
     type: Array,
     default: () => [],
-  }
+  },
+  category: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 console.log('tasks', props.task);
@@ -64,8 +68,8 @@ function getCategoryName(categoryId) {
     return 'No Category';
   }
 
-  const category = props.categories[categoryId];
-  return category ? category : 'No Category';
+  const categoryName = props.category[categoryId];
+  return categoryName ? categoryName : 'No Category';
 }
 
 </script>
