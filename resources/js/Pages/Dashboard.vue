@@ -59,6 +59,16 @@ function enterPressedOnNewTask() {
   });
 }
 
+function getCurrentDateTime() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
 onMounted(() => {
   if (props.tasks.length == 0) {
     focused.value = true;
@@ -149,6 +159,7 @@ onMounted(() => {
               type="datetime-local"
               ref="newTaskInput"
               class="border-gray-300 bg-white dark:bg-gray-200 text-gray-900 dark:text-gray-700 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-r-md shadow-sm px-3 py-2 w-72"
+              :min="getCurrentDateTime()"
             />
             <select
               name="category"
