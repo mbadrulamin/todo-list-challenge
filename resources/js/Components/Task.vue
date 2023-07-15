@@ -3,7 +3,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import ConfirmationModal from "@/Components/ConfirmationModal.vue";
 import { DateTime } from "luxon";
 import { router } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   task: {
@@ -21,7 +21,6 @@ console.log('categories', props.categories);
 
 const showDeleteConfirmation = ref(false);
 const showDeleteButton = ref(false);
-const categories = ref([]);
 
 function updateTask(taskId) {
   router.put(
@@ -61,8 +60,12 @@ function confirmDelete(taskId) {
 
 
 function getCategoryName(categoryId) {
-  const category = props.categories.find((category) => category.id === categoryId);
-  return category ? category.category_name : '';
+  if(!categoryId){
+    return 'No Category';
+  }
+
+  const category = props.categories[categoryId];
+  return category ? category : 'No Category';
 }
 
 </script>
@@ -117,8 +120,8 @@ function getCategoryName(categoryId) {
           Completed on: {{ formatDate(task.updated_at) }}
         </p>
         <p v-else class="text-gray-500 text-sm" >
-          Due on: {{task.due_date}} <br>
-          Category: {{ task.category_id }}
+          Due on: {{task.due_date ? task.due_date : 'No Due Date'}} <br>
+          Category: {{ getCategoryName(task.category_id) }}
         </p>
       </div>
       <button v-show="showDeleteButton" @click="confirmDelete(task.id)">
