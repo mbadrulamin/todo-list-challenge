@@ -117,11 +117,12 @@ function getCategoryName(categoryId) {
           >{{ task.title }}</label
         >
         <p v-if="task.is_completed" class="text-gray-500 text-sm">
+          Category: {{ getCategoryName(task.category_id) }} <br>
           Completed on: {{ formatDate(task.updated_at) }}
         </p>
         <p v-else class="text-gray-500 text-sm" >
-          Due on: {{task.due_date ? task.due_date : 'No Due Date'}} <br>
-          Category: {{ getCategoryName(task.category_id) }}
+          Category: {{ getCategoryName(task.category_id) }} <br>
+          Due on: {{task.due_date ? task.due_date : 'No Due Date'}}
         </p>
       </div>
       <button v-show="showDeleteButton" @click="confirmDelete(task.id)">

@@ -122,7 +122,7 @@ onMounted(() => {
         </div>
         <div v-if="showCompletedTask" class="space-y-2">
           <template v-if="completedTasks.length > 0">
-            <Task v-for="task in completedTasks" :key="task.id" :task="task" />
+            <Task v-for="task in completedTasks" :key="task.id" :task="task" :categories="categories" />
           </template>
           <div v-else class="flex flex-col items-center px-4 py-6">
             <!-- <img
