@@ -1,5 +1,6 @@
 <script setup>
 import Checkbox from "@/Components/Checkbox.vue";
+import ConfirmationModal from "@/Components/ConfirmationModal.vue";
 import { DateTime } from "luxon";
 import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
@@ -18,6 +19,7 @@ const props = defineProps({
 console.log('tasks', props.task);
 console.log('categories', props.categories);
 
+const showDeleteConfirmation = ref(false);
 const showDeleteButton = ref(false);
 const categories = ref([]);
 
@@ -53,6 +55,11 @@ function formatDate(date) {
   return formattedDate;
 }
 
+function confirmDelete(taskId) {
+  showDeleteConfirmation.value = true;
+}
+
+
 function getCategoryName(categoryId) {
   const category = props.categories.find((category) => category.id === categoryId);
   return category ? category.category_name : '';
@@ -67,6 +74,32 @@ function getCategoryName(categoryId) {
     @mouseover="showDeleteButton = true"
     @mouseleave="showDeleteButton = false"
   >
+    <ConfirmationModal
+      :show="showDeleteConfirmation"
+      maxWidth="sm"
+      @close="showDeleteConfirmation = false"
+    >
+      <template #title>
+        <h3 class="text-lg font-medium">Confirmation</h3>
+      </template>
+      <template #content>
+        <p>Are you sure you want to delete this task?</p>
+      </template>
+      <template #footer>
+        <button
+          class="px-4 py-2 bg-red-500 text-white rounded-md"
+          @click="deleteTask(task.id)"
+        >
+          Delete
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md ml-2"
+          @click="showDeleteConfirmation = false"
+        >
+          Cancel
+        </button>
+      </template>
+    </ConfirmationModal>
     <div class="flex items-center justify-between space-x-3">
       <Checkbox
         :checked="task.is_completed"
@@ -88,7 +121,7 @@ function getCategoryName(categoryId) {
           Category: {{ task.category_id }}
         </p>
       </div>
-      <button v-show="showDeleteButton" @click="deleteTask(task.id)">
+      <button v-show="showDeleteButton" @click="confirmDelete(task.id)">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="1em"
