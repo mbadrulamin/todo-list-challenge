@@ -15,7 +15,11 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $categories = Category::where('user_id', $request->user()->id)->get();
+
+        return Inertia::render('Category', [
+          'categories' => $categories,
+      ]);
     }
 
     /**
@@ -23,7 +27,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia('CategoryForm');
     }
 
     /**
@@ -42,7 +46,7 @@ class CategoryController extends Controller
       $category->user()->associate($request->user());
       $category->save();
 
-      return back(303);
+      return to_route('categories.index');
     }
 
     /**
@@ -58,7 +62,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return Inertia('CategoryForm', [
+          'categories' => $category
+        ]);
     }
 
     /**
@@ -66,7 +72,15 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $validatedData = $request->validate([
+            'category_name' => 'required|string',
+        ]);
+
+        $category->category_name = $validatedData['category_name'];
+        $category->save();
+
+        // Optionally, you can return a response or redirect
+        return to_route('categories.index');
     }
 
     /**
@@ -74,6 +88,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+      $this->authorize('delete', $category);
+      $category->delete();
+
+      return back(303);
     }
 }
