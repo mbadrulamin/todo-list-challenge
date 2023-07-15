@@ -213,6 +213,10 @@ const logout = () => {
                       Profile
                     </DropdownLink>
 
+                    <DropdownLink :href="route('categories.add')">
+                      Add New Category
+                    </DropdownLink>
+
                     <DropdownLink
                       v-if="$page.props.jetstream.hasApiFeatures"
                       :href="route('api-tokens.index')"

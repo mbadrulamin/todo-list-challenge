@@ -86,7 +86,6 @@ function getCategoryName(categoryId) {
         <p v-else class="text-gray-500 text-sm" >
           Due on: {{task.due_date}} <br>
           Category: {{ task.category_id }}
-          Category: {{ getCategoryName(categories.category_name) }}
         </p>
       </div>
       <button v-show="showDeleteButton" @click="deleteTask(task.id)">
