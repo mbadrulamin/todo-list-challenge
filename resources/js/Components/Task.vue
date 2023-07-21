@@ -1,15 +1,29 @@
 <script setup>
 import Checkbox from "@/Components/Checkbox.vue";
+import ConfirmationModal from "@/Components/ConfirmationModal.vue";
+import { DateTime } from "luxon";
 import { router } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   task: {
     type: Object,
     default: null,
   },
+  categories: {
+    type: Array,
+    default: () => [],
+  },
+  category: {
+    type: Array,
+    default: () => [],
+  },
 });
 
+console.log('tasks', props.task);
+console.log('categories', props.categories);
+
+const showDeleteConfirmation = ref(false);
 const showDeleteButton = ref(false);
 
 function updateTask(taskId) {
@@ -35,6 +49,29 @@ function deleteTask(taskId) {
     },
   });
 }
+
+function formatDate(date) {
+  if (!date) {
+    return '';
+  }
+  const formattedDate = DateTime.fromISO(date).toLocaleString(DateTime.DATETIME_MED);
+  return formattedDate;
+}
+
+function confirmDelete(taskId) {
+  showDeleteConfirmation.value = true;
+}
+
+
+function getCategoryName(categoryId) {
+  if(!categoryId){
+    return 'No Category';
+  }
+
+  const categoryName = props.category[categoryId];
+  return categoryName ? categoryName : 'No Category';
+}
+
 </script>
 
 <template>
@@ -44,6 +81,32 @@ function deleteTask(taskId) {
     @mouseover="showDeleteButton = true"
     @mouseleave="showDeleteButton = false"
   >
+    <ConfirmationModal
+      :show="showDeleteConfirmation"
+      maxWidth="sm"
+      @close="showDeleteConfirmation = false"
+    >
+      <template #title>
+        <h3 class="text-lg font-medium">Confirmation</h3>
+      </template>
+      <template #content>
+        <p>Are you sure you want to delete this task?</p>
+      </template>
+      <template #footer>
+        <button
+          class="px-4 py-2 bg-red-500 text-white rounded-md"
+          @click="deleteTask(task.id)"
+        >
+          Delete
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md ml-2"
+          @click="showDeleteConfirmation = false"
+        >
+          Cancel
+        </button>
+      </template>
+    </ConfirmationModal>
     <div class="flex items-center justify-between space-x-3">
       <Checkbox
         :checked="task.is_completed"
@@ -57,8 +120,16 @@ function deleteTask(taskId) {
           :class="{ 'line-through': task.is_completed }"
           >{{ task.title }}</label
         >
+        <p v-if="task.is_completed" class="text-gray-500 text-sm">
+          Category: {{ getCategoryName(task.category_id) }} <br>
+          Completed on: {{ formatDate(task.updated_at) }}
+        </p>
+        <p v-else class="text-gray-500 text-sm" >
+          Category: {{ getCategoryName(task.category_id) }} <br>
+          Due on: {{task.due_date ? task.due_date : 'No Due Date'}}
+        </p>
       </div>
-      <button v-show="showDeleteButton" @click="deleteTask(task.id)">
+      <button v-show="showDeleteButton" @click="confirmDelete(task.id)">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="1em"

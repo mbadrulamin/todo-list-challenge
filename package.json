@@ -26,5 +26,8 @@
     },
     "prettier": {
         "pluginSearchDirs": false
+    },
+    "dependencies": {
+        "luxon": "^3.3.0"
     }
 }
