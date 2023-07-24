@@ -171,7 +171,7 @@ onMounted(() => {
               ref="newTaskInput"
               class="border-gray-300 bg-white dark:bg-gray-200 text-gray-900 dark:text-gray-700 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-r-none shadow-sm px-3 py-2 w-64"
             >
-              <option value="" disabled selected>Select Category</option>
+              <option value="null" disabled selected>Select Category</option>
               <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.category_name }}</option>
             </select>
             <button
